@@ -6,7 +6,7 @@ const Room = require('./Room');
 /** ChatUser is a individual connection from client -> server to chat. */
 
 class ChatUser {
-  /** make chat: store connection-device, rooom */
+  /** make chat: store connection-device, room */
 
   constructor(send, roomName) {
     this._send = send; // "send" function for this user
@@ -20,10 +20,25 @@ class ChatUser {
 
   send(data) {
     try {
-      this._send(data);
+      this._send(data)
     } catch {
       // If trying to send to a user fails, ignore it
     }
+  }
+
+  // New Code
+  handleJoke(text) {
+    console.log('In handleJoke')
+    //   try {
+    //       this._send(text);
+    //   } catch {
+    //       // If trying to send to a user fails, ignore it
+    //   }
+    this.room.broadcast({
+        name: 'Server',
+        type: 'chat',
+        text: text
+      });
   }
 
   /** handle joining: add to room members, announce join */
@@ -58,6 +73,8 @@ class ChatUser {
 
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
+    else if (msg.type === 'get-joke') this.handleJoke('What is black and white and red all over? A newspaper'); // New Code
+    // else if (msg.type === 'get-joke') this.handleJoke(msg.text); // New Code
     else throw new Error(`bad message: ${msg.type}`);
   }
 

@@ -24,32 +24,32 @@ const ChatUser = require('./ChatUser');
  */
 
 app.ws('/chat/:roomName', function(ws, req, next) {
-  try {
-    const user = new ChatUser(
-      ws.send.bind(ws), // fn to call to message this user
-      req.params.roomName // name of room for user
-    );
+	try {
+		const user = new ChatUser(
+			ws.send.bind(ws), // fn to call to message this user
+			req.params.roomName // name of room for user
+		);
 
-    // register handlers for message-received, connection-closed
+		// register handlers for message-received, connection-closed
 
-    ws.on('message', function(data) {
-      try {
-        user.handleMessage(data);
-      } catch (err) {
-        console.error(err);
-      }
-    });
+		ws.on('message', function(data) {
+			try {
+				user.handleMessage(data);
+			} catch (err) {
+				console.error(err);
+			}
+		});
 
-    ws.on('close', function() {
-      try {
-        user.handleClose();
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  } catch (err) {
-    console.error(err);
-  }
+		ws.on('close', function() {
+			try {
+				user.handleClose();
+			} catch (err) {
+				console.error(err);
+			}
+		});
+	} catch (err) {
+		console.error(err);
+	}
 });
 
 /** serve homepage --- just static HTML
@@ -60,7 +60,7 @@ app.ws('/chat/:roomName', function(ws, req, next) {
  * */
 
 app.get('/:roomName', function(req, res, next) {
-  res.sendFile(`${__dirname}/chat.html`);
+	res.sendFile(`${__dirname}/chat.html`);
 });
 
 module.exports = app;
